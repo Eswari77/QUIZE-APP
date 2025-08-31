@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jumping Cat Facts</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #fdf6ec, #ffe4c4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #ff6f61;
+        }
+
+        #fact {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            transition: opacity 0.5s ease;
+        }
+
+        .jump {
+            animation: jump 0.5s ease;
+        }
+
+        button {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            background: #ffb347;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #ffa500;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes jump {
+            0% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-20px);
+            }
+
+            50% {
+                transform: translateY(0);
+            }
+
+            70% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #fact {
+                font-size: 1rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🐱 Cat Fact of the Moment</h1>
+        <p id="fact">Click the button to discover a fun cat fact!</p>
+        <button id="fetch-btn">Next Fact</button>
+    </div>
+
+    <script>
+        const factEl = document.getElementById("fact");
+        const btn = document.getElementById("fetch-btn");
+
+        async function fetchCatFact() {
+            factEl.classList.remove("jump");
+            factEl.style.opacity = 0;
+
+            try {
+                const response = await fetch("https://catfact.ninja/fact");
+                const data = await response.json();
+
+                setTimeout(() => {
+                    factEl.textContent = data.fact;
+                    factEl.style.opacity = 1;
+                    factEl.classList.add("jump");
+                }, 300);
+            } catch (error) {
+                factEl.textContent = "Oops! Couldn't fetch a cat fact.";
+                factEl.style.opacity = 1;
+                factEl.classList.add("jump");
+                console.error(error);
+            }
+        }
+
+        btn.addEventListener("click", fetchCatFact);
+    </script>
+</body>
+
+</html>
